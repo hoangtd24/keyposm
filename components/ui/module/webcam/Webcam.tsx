@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import Webcam from "react-webcam";
 import { useToast } from "../../use-toast";
+import { Dialog, DialogContent } from "../../dialog";
 
 type MyWebcamProps = {
   showWebcam: boolean;
@@ -24,6 +25,7 @@ const MyWebcam = ({
   setImgSrc,
   setShowWebcam,
   setCheckImage,
+  showWebcam,
 }: MyWebcamProps) => {
   const { toast } = useToast();
   const [error, setError] = useState<string>("");
@@ -66,27 +68,47 @@ const MyWebcam = ({
     });
     setShowWebcam(false);
   }, [setCheckImage, setImgSrc, setShowWebcam]);
-  return (
-    <div className="relative">
-      <Webcam
-        audio={false}
-        ref={webcamRef}
-        screenshotFormat="image/jpeg"
-        videoConstraints={{ facingMode: { exact: "environment" } }}
-        onUserMediaError={(err) => setError(err.toString())}
-        onUserMedia={(stream) => {
-          setActive(stream.active);
-        }}
-      />
-      {active && (
-        <button
-          onClick={capture}
-          className="absolute left-[50%] bottom-8 translate-x-[-50%] border-4 border-[#fff] rounded-full"
-        >
-          <div className="w-14 h-14 rounded-full bg-white border-2 border-slate-800"></div>
-        </button>
-      )}
-    </div>
+  return active ? (
+    <Dialog
+      open={showWebcam}
+      onOpenChange={() => {
+        setShowWebcam(!showWebcam);
+      }}
+    >
+      <DialogContent className="sm:max-w-[500px] h-90vh max-h-[90vh] p-0">
+        <div className="relative">
+          <Webcam
+            audio={false}
+            ref={webcamRef}
+            screenshotFormat="image/jpeg"
+            videoConstraints={{ facingMode: { exact: "environment" } }}
+            onUserMediaError={(err) => setError(err.toString())}
+            onUserMedia={(stream) => {
+              setActive(stream.active);
+            }}
+          />
+          <button
+            onClick={capture}
+            className="absolute left-[50%] bottom-8 translate-x-[-50%] border-4 border-[#fff] rounded-full"
+          >
+            <div className="w-14 h-14 rounded-full bg-white border-2 border-slate-800"></div>
+          </button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  ) : (
+    <Webcam
+      audio={false}
+      ref={webcamRef}
+      screenshotFormat="image/jpeg"
+      videoConstraints={{ facingMode: { exact: "environment" } }}
+      onUserMediaError={(err) => setError(err.toString())}
+      onUserMedia={(stream) => {
+        setActive(stream.active);
+      }}
+      width={0}
+      height={0}
+    />
   );
 };
 

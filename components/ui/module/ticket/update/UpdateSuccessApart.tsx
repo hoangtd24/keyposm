@@ -534,21 +534,14 @@ export default function UpdateSuccessApart({
           </div>
         </DialogContent>
       </Dialog>
-      <Dialog
-        open={showWebcam}
-        onOpenChange={() => {
-          setShowWebcam(!showWebcam);
-        }}
-      >
-        <DialogContent className="sm:max-w-[500px] p-0 max-h-[90vh]">
-          <MyWebcam
-            showWebcam={showWebcam}
-            setShowWebcam={setShowWebcam}
-            setImgSrc={setImgSrc}
-            setCheckImage={setCheckImage}
-          />
-        </DialogContent>
-      </Dialog>
+      {showWebcam && (
+        <MyWebcam
+          showWebcam={showWebcam}
+          setShowWebcam={setShowWebcam}
+          setImgSrc={setImgSrc}
+          setCheckImage={setCheckImage}
+        />
+      )}
     </div>
   );
 }

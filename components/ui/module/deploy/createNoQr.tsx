@@ -802,21 +802,14 @@ const CreateDeployNoQr = ({
           </div>
         </DialogContent>
       </Dialog>
-      <Dialog
-        open={showWebcam}
-        onOpenChange={() => {
-          setShowWebcam(!showWebcam);
-        }}
-      >
-        <DialogContent className="sm:max-w-[500px] max-h-[90vh] p-0">
-          <MyWebcam
-            showWebcam={showWebcam}
-            setShowWebcam={setShowWebcam}
-            setImgSrc={setImgSrc}
-            setCheckImage={setCheckImage}
-          />
-        </DialogContent>
-      </Dialog>
+      {showWebcam && (
+        <MyWebcam
+          showWebcam={showWebcam}
+          setShowWebcam={setShowWebcam}
+          setImgSrc={setImgSrc}
+          setCheckImage={setCheckImage}
+        />
+      )}
     </>
   );
 };

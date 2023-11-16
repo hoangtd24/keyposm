@@ -158,31 +158,18 @@ export default function Report() {
           </Button>
         </div>
       )}
-      <Dialog
-        open={showScanner}
-        onOpenChange={() => {
-          setShowScanner(!showScanner);
-          setSaleCheck(false);
-          navigator.mediaDevices
-            .getUserMedia({ audio: false, video: true })
-            .then((mediaStream) => {
-              const tracks = mediaStream.getTracks();
-              tracks[0].stop();
-            });
-        }}
-      >
-        <DialogContent className="sm:max-w-[500px] p-0">
-          <div className="relative z-10 overflow-x-hidden max-h-[90vh]">
-            <Scanner
-              setShowScanner={setShowScanner}
-              setShowQrInfo={setShowQrInfo}
-              setQrInfo={setQrInfo}
-              setAlert={setAlert}
-              saleCheck={saleCheck}
-            />
-          </div>
-        </DialogContent>
-      </Dialog>
+
+      {showScanner && (
+        <Scanner
+          setShowScanner={setShowScanner}
+          setShowQrInfo={setShowQrInfo}
+          setQrInfo={setQrInfo}
+          setAlert={setAlert}
+          saleCheck={saleCheck}
+          setSaleCheck={setSaleCheck}
+          showScanner={showScanner}
+        />
+      )}
       {typeCreate === "deploy" && roleId !== 5 && (
         <Create
           qrInfo={qrInfo}
