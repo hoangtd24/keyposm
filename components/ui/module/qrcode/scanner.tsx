@@ -29,15 +29,7 @@ const Scanner = ({
   const { toast } = useToast();
   const video = useRef<HTMLVideoElement>(null);
   const [qrScanner, setQrScanner] = useState<QrScanner | null>(null);
-  const [active, setActive] = useState(false);
-  useEffect(() => {
-    navigator.mediaDevices
-      .getUserMedia({ audio: false, video: true })
-      .then((mediaStream) => {
-        const tracks = mediaStream.getTracks();
-        setActive(tracks[0].enabled);
-      });
-  }, [active]);
+
   function handleScan(result: QrScanner.ScanResult) {
     //Logic with scanned qr code
     if (!result.data) {
@@ -45,7 +37,7 @@ const Scanner = ({
     }
     qrScanner?.stop();
     const uuid = result.data?.split("/")[3];
-    if (saleCheck) {
+    if (saleCheck === true) {
       axiosWithHeaders("post", CHECK_INFO_QRCODE_API, {
         uuid: uuid,
       })
@@ -71,7 +63,8 @@ const Scanner = ({
           console.log(error);
           setShowScanner(false);
         });
-    } else {
+    }
+    if (saleCheck === false) {
       axiosWithHeaders("post", DETAIL_QRCODE_API, {
         uuid: uuid,
       })
@@ -83,6 +76,11 @@ const Scanner = ({
                 setQrInfo(result);
                 setShowQrInfo(true);
                 setShowScanner(false);
+              } else {
+                toast({
+                  title: "Thông báo",
+                  description: "Mã QR chưa được lắp đặt",
+                });
               }
             } else if (status === enums.STATUS_HAVE_DEPLOYED) {
               setAlert(true);
@@ -113,18 +111,17 @@ const Scanner = ({
         },
         {
           highlightScanRegion: true,
-          highlightCodeOutline: true,
+          maxScansPerSecond: 3,
         }
       );
-      qrScanner;
       qrScanner.start();
       setQrScanner(qrScanner);
     }
     // Dependency array missing handleScan, since it should not set Scanner on handleScan change
     // eslint-disable-next-line
-  }, [video.current, active]);
+  }, [video.current]);
 
-  return active ? (
+  return (
     <Dialog
       open={showScanner}
       onOpenChange={async () => {
@@ -142,8 +139,6 @@ const Scanner = ({
         </div>
       </DialogContent>
     </Dialog>
-  ) : (
-    <video ref={video} id="video" className="w-0 h-0"></video>
   );
 };
 
