@@ -75,7 +75,7 @@ const MyWebcam = ({
         setShowWebcam(!showWebcam);
       }}
     >
-      <DialogContent className="sm:max-w-[500px] h-[90vh] sm:h-auto p-0">
+      <DialogContent className="sm:max-w-[500px] p-0">
         <div className="relative">
           <Webcam
             audio={false}
@@ -86,7 +86,7 @@ const MyWebcam = ({
             onUserMedia={(stream) => {
               setActive(stream.active);
             }}
-            className="w-full"
+            className="w-full h-[90vh] sm:h-auto"
           />
           {active && (
             <button
