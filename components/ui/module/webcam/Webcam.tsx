@@ -39,15 +39,17 @@ const MyWebcam = ({
         title: "Thông báo",
         description: "Thiết bị không hỗ trợ",
       });
+      setShowWebcam(false);
     }
 
     if (error === "NotAllowedError: Permission denied") {
       toast({
         title: "Thông báo",
-        description: "Bạn cần bật máy ảnh",
+        description: "Bạn cần bật máy ảnh và tải lại trang",
       });
+      setShowWebcam(false);
     }
-  }, [error, toast]);
+  }, [error, setShowWebcam, toast]);
   const webcamRef = useRef<any>(null);
   const capture = useCallback(() => {
     const imageSrc = webcamRef.current?.getScreenshot();
@@ -86,7 +88,7 @@ const MyWebcam = ({
             onUserMedia={(stream) => {
               setActive(stream.active);
             }}
-            className="w-full h-[90vh] sm:h-auto"
+            className="w-full max-h-[90vh]"
           />
           {active && (
             <button
