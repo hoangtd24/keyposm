@@ -3,6 +3,7 @@ import React, {
   SetStateAction,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -30,6 +31,11 @@ const MyWebcam = ({
   const { toast } = useToast();
   const [error, setError] = useState<string>("");
   const [active, setActive] = useState<boolean>(false);
+  const [height, setHeight] = useState(0);
+  useLayoutEffect(() => {
+    const width = document.querySelector("video")?.offsetWidth as number;
+    setHeight((width * 3) / 2);
+  }, []);
   useEffect(() => {
     if (!error) {
       return;
@@ -83,12 +89,13 @@ const MyWebcam = ({
             audio={false}
             ref={webcamRef}
             screenshotFormat="image/jpeg"
-            videoConstraints={{ facingMode: { exact: "environment" } }}
+            videoConstraints={{ facingMode: "user", aspectRatio: 0.66666666666667 }}
             onUserMediaError={(err) => setError(err.toString())}
             // onUserMedia={(stream) => {
             //   setActive(stream.active);
             // }}
             className="w-full max-h-[90vh]"
+            height={height}
           />
           {active && (
             <button
@@ -106,12 +113,14 @@ const MyWebcam = ({
       audio={false}
       ref={webcamRef}
       screenshotFormat="image/jpeg"
-      videoConstraints={{ facingMode: { exact: "environment" } }}
+      videoConstraints={{
+        facingMode: "user",
+        aspectRatio: 0.66666666667,
+      }}
       onUserMediaError={(err) => setError(err.toString())}
       onUserMedia={(stream) => {
         setActive(stream.active);
       }}
-      width={0}
       height={0}
     />
   );
