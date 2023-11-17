@@ -75,7 +75,7 @@ const MyWebcam = ({
         setShowWebcam(!showWebcam);
       }}
     >
-      <DialogContent className="sm:max-w-[500px] h-screen sm:h-auto p-0">
+      <DialogContent className="sm:max-w-[500px] sm:h-auto p-0">
         <div className="relative">
           <Webcam
             audio={false}

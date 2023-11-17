@@ -135,7 +135,7 @@ const Scanner = ({
     >
       <DialogContent className="sm:max-w-[500px] p-0 shadow-none">
         <div className="relative z-10 overflow-x-hidden sm:h-fit h-[90vh] max-h-[90vh]">
-          <video ref={video} id="video" className="w-full h-full"></video>
+          <video ref={video} id="video" className="w-full"></video>
         </div>
       </DialogContent>
     </Dialog>
