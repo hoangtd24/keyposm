@@ -32,10 +32,11 @@ const MyWebcam = ({
   const [error, setError] = useState<string>("");
   const [active, setActive] = useState<boolean>(false);
   const [height, setHeight] = useState(0);
+
   useLayoutEffect(() => {
     const width = document.querySelector("video")?.offsetWidth as number;
     setHeight((width * 3) / 2);
-  }, []);
+  }, [active]);
   useEffect(() => {
     if (!error) {
       return;
@@ -55,7 +56,7 @@ const MyWebcam = ({
       });
       setShowWebcam(false);
     }
-  }, [error, setShowWebcam, toast]);
+  }, [error, toast, setShowWebcam]);
   const webcamRef = useRef<any>(null);
   const capture = useCallback(() => {
     const imageSrc = webcamRef.current?.getScreenshot();
@@ -76,7 +77,7 @@ const MyWebcam = ({
     });
     setShowWebcam(false);
   }, [setCheckImage, setImgSrc, setShowWebcam]);
-  return active ? (
+  return (
     <Dialog
       open={showWebcam}
       onOpenChange={() => {
@@ -89,16 +90,13 @@ const MyWebcam = ({
             audio={false}
             ref={webcamRef}
             screenshotFormat="image/jpeg"
-            videoConstraints={{
-              facingMode: { exact: "environment" },
-              aspectRatio: 1.5,
-            }}
+            videoConstraints={{ facingMode: "user" }}
             onUserMediaError={(err) => setError(err.toString())}
-            // onUserMedia={(stream) => {
-            //   setActive(stream.active);
-            // }}
-            className="w-full max-h-[90vh]"
-            height={height}
+            onUserMedia={(stream) => {
+              setActive(stream.active);
+            }}
+            className="w-full max-h-[90vh] aspect-[2/3] sm:aspect-auto"
+            // height={height}
           />
           {active && (
             <button
@@ -111,21 +109,6 @@ const MyWebcam = ({
         </div>
       </DialogContent>
     </Dialog>
-  ) : (
-    <Webcam
-      audio={false}
-      ref={webcamRef}
-      screenshotFormat="image/jpeg"
-      videoConstraints={{
-        facingMode: { exact: "environment" },
-        aspectRatio: 1.5,
-      }}
-      onUserMediaError={(err) => setError(err.toString())}
-      onUserMedia={(stream) => {
-        setActive(stream.active);
-      }}
-      height={0}
-    />
   );
 };
 
