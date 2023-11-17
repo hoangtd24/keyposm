@@ -70,7 +70,7 @@ const MyWebcam = ({
     });
     setShowWebcam(false);
   }, [setCheckImage, setImgSrc, setShowWebcam]);
-  return (
+  return active ? (
     <Dialog
       open={showWebcam}
       onOpenChange={() => {
@@ -85,9 +85,9 @@ const MyWebcam = ({
             screenshotFormat="image/jpeg"
             videoConstraints={{ facingMode: { exact: "environment" } }}
             onUserMediaError={(err) => setError(err.toString())}
-            onUserMedia={(stream) => {
-              setActive(stream.active);
-            }}
+            // onUserMedia={(stream) => {
+            //   setActive(stream.active);
+            // }}
             className="w-full max-h-[90vh]"
           />
           {active && (
@@ -101,6 +101,19 @@ const MyWebcam = ({
         </div>
       </DialogContent>
     </Dialog>
+  ) : (
+    <Webcam
+      audio={false}
+      ref={webcamRef}
+      screenshotFormat="image/jpeg"
+      videoConstraints={{ facingMode: { exact: "environment" } }}
+      onUserMediaError={(err) => setError(err.toString())}
+      onUserMedia={(stream) => {
+        setActive(stream.active);
+      }}
+      width={0}
+      height={0}
+    />
   );
 };
 
