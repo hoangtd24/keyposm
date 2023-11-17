@@ -89,7 +89,10 @@ const MyWebcam = ({
             audio={false}
             ref={webcamRef}
             screenshotFormat="image/jpeg"
-            videoConstraints={{ facingMode: "user", aspectRatio: 0.66666666666667 }}
+            videoConstraints={{
+              facingMode: { exact: "environment" },
+              aspectRatio: 1.5,
+            }}
             onUserMediaError={(err) => setError(err.toString())}
             // onUserMedia={(stream) => {
             //   setActive(stream.active);
@@ -114,8 +117,8 @@ const MyWebcam = ({
       ref={webcamRef}
       screenshotFormat="image/jpeg"
       videoConstraints={{
-        facingMode: "user",
-        aspectRatio: 0.66666666667,
+        facingMode: { exact: "environment" },
+        aspectRatio: 1.5,
       }}
       onUserMediaError={(err) => setError(err.toString())}
       onUserMedia={(stream) => {
